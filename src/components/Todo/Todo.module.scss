@@ -1,0 +1,14 @@
+.container {
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.title {
+  font-size: 70px;
+  color: rgb(236, 215, 213);
+  font-weight: 100;
+
+  text-align: center;
+}
