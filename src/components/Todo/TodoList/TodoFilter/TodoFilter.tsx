@@ -7,7 +7,9 @@ import { PropsTodo } from '@/types/todo';
 const TodoFilter = ({ changeFilter, filterName, left, removeTodo }: PropsTodo) => {
   return (
     <div className={itemstyles.filter}>
-      <p className={itemstyles.filter__left}>{left} items left</p>
+      <p className={itemstyles.filter__left}>
+        {left && left >= 0 ? <div> {left} items left</div> : ''}{' '}
+      </p>
       <div className={itemstyles.filter__btn}>
         <Button
           text={'All'}
