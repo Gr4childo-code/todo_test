@@ -61,7 +61,7 @@ const Todo = () => {
 
   useEffect(() => {
     if (localStorage) {
-      const TODOS: Todo[] = localStorage.getItem('TODOS') ? JSON.parse(localStorage.getItem('TODOS')) : null;
+      const TODOS: Todo[] = localStorage.getItem('TODOS') ? JSON.parse(localStorage.getItem('TODOS')!) : [];
       setTask(TODOS);
     }
   }, []);
