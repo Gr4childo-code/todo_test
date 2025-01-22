@@ -18,8 +18,15 @@ export type PropsTodo = {
   filterName?: FilterValueType;
   left?: number | null;
 };
+
+export type PropsTodoForm = {
+  handleClick?: (e: { preventDefault: () => void }) => void;
+  inputNameFormRef: any;
+  visibleTodo?: boolean;
+  setVisibleTodo?: React.Dispatch<React.SetStateAction<boolean>>;
+};
 export type PropsButton = {
-  text?: string;
+  children?: React.ReactNode;
   filterName?: FilterValueType;
   onClick?: () => void;
 };

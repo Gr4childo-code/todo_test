@@ -18,14 +18,14 @@ const TodoItem = ({
         <input
           type='checkbox'
           id={id}
-          defaultChecked={isDone}
-          onClick={(): void => {
+          checked={isDone}
+          onChange={(): void => {
             changeChecked && changeChecked(id);
           }}
         />
         <label htmlFor={id}></label>
       </div>
-      <p className={isDone ? styles.title + ' ' + styles.dashed : styles.title}>{title}</p>
+      <p className={isDone ? `${styles.title} ${styles.dashed}` : styles.title}>{title}</p>
     </div>
   );
 };

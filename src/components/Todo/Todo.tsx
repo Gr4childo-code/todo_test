@@ -1,9 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import styles from './Todo.module.scss';
 import TodoList from './TodoList';
 
-import { Todo, FilterValueType, RefObject } from '@/types/todo';
+import { Todo, FilterValueType } from '@/types/todo';
 
 const Todo = () => {
   const [tasks, setTask] = useState<Todo[] | null>(null);
@@ -19,26 +19,37 @@ const Todo = () => {
       if (tasks === null) {
         setTask([newTask]);
         inputNameFormRef.current.value = '';
+        localStorage.setItem('TODOS', JSON.stringify([newTask]));
       } else {
         setTask([...tasks, newTask]);
         inputNameFormRef.current.value = '';
+        localStorage.setItem('TODOS', JSON.stringify([...tasks, newTask]));
       }
     }
   };
 
   const removeTodo = (): void => {
-    setTask(prev => prev && prev.filter((todo: { isDone: boolean }) => todo.isDone == false));
-  };
-  const changeChecked = (id: string): void => {
-    setTask(
-      prev =>
-        prev && prev.map(todo => (todo.id == id ? { ...todo, isDone: !todo.isDone } : { ...todo }))
+    localStorage.setItem(
+      'TODOS',
+      JSON.stringify(tasks && [...tasks.filter((todo: { isDone: boolean }) => todo.isDone == false)])
     );
+    setTask(tasks && [...tasks.filter((todo: { isDone: boolean }) => todo.isDone == false)]);
+  };
+  const changeChecked = (id: string) => {
+    localStorage.setItem(
+      'TODOS',
+      JSON.stringify(
+        tasks && [...tasks.map(todo => (todo.id === id ? { ...todo, isDone: !todo.isDone } : { ...todo }))]
+      )
+    );
+
+    setTask(tasks && [...tasks.map(todo => (todo.id === id ? { ...todo, isDone: !todo.isDone } : { ...todo }))]);
   };
 
   const changeFilter = (value: FilterValueType) => {
     setFilter(value);
   };
+
   let taskForTodoList = tasks;
   if (tasks) {
     if (filter === 'Completed') {
@@ -47,6 +58,13 @@ const Todo = () => {
       taskForTodoList = tasks.filter((t: { isDone: boolean }) => t.isDone === false);
     }
   }
+
+  useEffect(() => {
+    if (localStorage) {
+      const TODOS: Todo[] = localStorage.getItem('TODOS') ? JSON.parse(localStorage.getItem('TODOS')) : null;
+      setTask(TODOS);
+    }
+  }, []);
 
   return (
     <div className={styles.container}>

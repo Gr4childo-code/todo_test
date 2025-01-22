@@ -1,3 +1,7 @@
+.relativeContainer {
+  position: relative;
+  min-height: 300px;
+}
 .container {
   background-color: rgb(254, 254, 254);
   -webkit-box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
@@ -7,6 +11,7 @@
   align-items: center;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .filter {
@@ -24,4 +29,41 @@
     display: flex;
     gap: 10px;
   }
+}
+
+.todoList {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  overflow: hidden;
+  transition: max-height 0.4s ease-in-out, opacity 0.5s ease-in-out;
+  max-height: 0;
+  opacity: 0;
+
+  &.slideDown {
+    max-height: 500px;
+    opacity: 1;
+  }
+
+  &.slideUp {
+    max-height: 0;
+    opacity: 0;
+  }
+}
+.stripes_container {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  z-index: -1;
+}
+
+.stripe {
+  position: relative;
+  height: 4px;
+  background-color: rgb(254, 254, 254);
+  -webkit-box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
+  margin-bottom: 0.5px;
 }

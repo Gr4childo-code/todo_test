@@ -1,12 +1,11 @@
 .container {
   display: flex;
   width: 100%;
-  gap: 40px;
+  gap: 20px;
   align-items: center;
   padding: 0 10px;
   height: 65px;
 
-  border-top: 1px solid rgba(0, 0, 0, 0.2);
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 
@@ -24,6 +23,8 @@
 .round_checkbox {
   top: -3px;
   position: relative;
+  width: 28px;
+  height: 28px;
 }
 
 .round_checkbox label {

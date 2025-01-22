@@ -1,58 +1,69 @@
 /**
  * @jest-environment jsdom
  */
-import { fireEvent, render, screen } from '@testing-library/react';
+
+import { render, fireEvent, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+
 import Home from '@/app/page';
 
-describe('Home', () => {
-  it('renders a heading', () => {
-    render(<Home />);
+test('Home', async () => {
+  render(<Home />);
 
-    const heading = screen.getByRole('heading', {
-      name: 'todos'
-    });
+  await screen.findByRole('heading');
+  expect(screen.getByRole('heading')).toHaveTextContent('todos');
+});
 
-    expect(heading).toBeInTheDocument();
-  });
+test('add a new todo item', async () => {
+  render(<Home />);
 
-  it('add new todo', () => {
-    render(<Home />);
-    const todoInput = screen.getByPlaceholderText('What needs to be done?');
-    const testTodoText = 'Jest';
-    fireEvent.change(todoInput, { target: { value: testTodoText } });
-    expect(todoInput.value).toBe(testTodoText);
-    fireEvent.submit(todoInput);
-    const newTodo = screen.getByText(testTodoText);
-    expect(newTodo).toBeInTheDocument();
-  });
-  it('click to checkbox', () => {
-    render(<Home />);
-    const todoInput = screen.getByPlaceholderText('What needs to be done?');
-    const testTodoText = 'Jest';
-    fireEvent.change(todoInput, { target: { value: testTodoText } });
-    expect(todoInput.value).toBe(testTodoText);
-    fireEvent.submit(todoInput);
-    const newTodo = screen.getByText(testTodoText);
-    expect(newTodo).toBeInTheDocument();
+  const todoInput = screen.getByPlaceholderText('What needs to be done?');
+  const testTodoText = 'Jest';
 
-    const checkbox = screen.getByRole('checkbox');
-    fireEvent.click(checkbox);
-    expect((todoInput.style.textDecoration = 'line-through'));
-  });
-  it('Clear all complete', () => {
-    render(<Home />);
-    const todoInput = screen.getByPlaceholderText('What needs to be done?');
-    const testTodoText = 'Jest';
-    fireEvent.change(todoInput, { target: { value: testTodoText } });
-    expect(todoInput.value).toBe(testTodoText);
-    fireEvent.submit(todoInput);
-    const newTodo = screen.getByText(testTodoText);
-    expect(newTodo).toBeInTheDocument();
+  fireEvent.change(todoInput, { target: { value: testTodoText } });
+  fireEvent.submit(todoInput);
 
-    const checkbox = screen.getByRole('checkbox');
-    fireEvent.click(checkbox);
-    // const clearTodo = screen.getAllByText('Clear completed');
-    fireEvent.click(screen.getByText('Clear completed'));
-    expect(screen.getByText('0 items left'));
-  });
+  const newTodo = screen.getByText(testTodoText);
+  expect(newTodo).toBeInTheDocument();
+});
+
+test('toggles the todo completion state', async () => {
+  render(<Home />);
+
+  const todoInput = screen.getByPlaceholderText('What needs to be done?');
+  const testTodoText = 'Test1';
+
+  fireEvent.change(todoInput, { target: { value: testTodoText } });
+  fireEvent.submit(todoInput);
+
+  const newTodo = await screen.findByText(testTodoText);
+  expect(newTodo).toBeInTheDocument();
+
+  const todoItem = newTodo.closest('div');
+  const checkbox = todoItem?.querySelector('input[type="checkbox"]');
+  checkbox && fireEvent.click(checkbox);
+
+  expect((todoInput.style.textDecoration = 'line-through'));
+});
+test('clears all completed todos', async () => {
+  render(<Home />);
+  const todoInput = screen.getByPlaceholderText('What needs to be done?');
+  const testTodoText = 'TodoCompleted';
+
+  fireEvent.change(todoInput, { target: { value: testTodoText } });
+  fireEvent.submit(todoInput);
+
+  const newTodo = await screen.findByText(testTodoText);
+  expect(newTodo).toBeInTheDocument();
+
+  const todoItem = newTodo.closest('div');
+  const checkbox = todoItem?.querySelector('input[type="checkbox"]');
+  checkbox && fireEvent.click(checkbox);
+
+  fireEvent.click(screen.getByText('Clear completed'));
+
+  const todos = screen.queryAllByText(testTodoText);
+  expect(todos.length).toBe(0);
+
+  expect(screen.getByText('1 items left')).toBeInTheDocument();
 });
